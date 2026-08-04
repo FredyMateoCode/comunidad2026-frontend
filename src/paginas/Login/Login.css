@@ -1,0 +1,47 @@
+/*
+  Mini-reset para asegurar que no haya márgenes o padding por defecto
+  en el body que afecten el centrado.
+*/
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/*
+  Este contenedor principal usa `position: fixed` para ocupar toda la ventana.
+  Luego, usa `display: flex` para centrar el contenido perfectamente.
+*/
+.login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f2f5;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/*
+  Estilos de la tarjeta de login
+*/
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* Asegura que la tarjeta no se vea afectada por el padding del contenedor */
+  margin: auto; 
+}
+
+/* Estilos del encabezado del formulario */
+.login-header {
+  margin-bottom: 20px;
+}

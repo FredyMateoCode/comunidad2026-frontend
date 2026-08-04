@@ -1,0 +1,40 @@
+/*
+ * Archivo: AutoContentSlider.css
+ */
+.auto-content-slider-container {
+  position: relative;
+  height: 500px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  
+  /* Solución para que la imagen no se muestre en mosaico */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/*
+ * Estilos para hacer el componente responsive
+ */
+@media (max-width: 600px) {
+  .auto-content-slider-container {
+    height: 400px;
+  }
+
+  .auto-content-slider-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .auto-content-slider-container h6 {
+    font-size: 0.9rem;
+  }
+}

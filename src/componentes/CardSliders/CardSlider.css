@@ -1,0 +1,41 @@
+/*
+ * Archivo: CardSlider.css
+ */
+.slider-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+  cursor: grab;
+}
+
+.slider-track {
+  display: flex;
+  width: max-content; /* Permite que el contenedor crezca con sus elementos */
+  animation: scroll-slide 20s linear infinite; /* Animación de desplazamiento */
+}
+
+/* Pausa la animación al pasar el mouse por encima */
+.slider-container:hover .slider-track {
+  animation-play-state: paused;
+}
+
+.slider-card-wrapper {
+  padding: 0 16px;
+  flex: 0 0 auto;
+}
+
+.slider-card {
+  width: 280px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Definición de la animación */
+@keyframes scroll-slide {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
