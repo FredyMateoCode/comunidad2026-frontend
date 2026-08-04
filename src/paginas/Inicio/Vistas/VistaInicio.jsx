@@ -1,6 +1,5 @@
 // VistaInicio.jsx
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -10,10 +9,10 @@ import CarouselVertical from '../../../componentes/Carousels/CarouselVertical';
 import CardSlider from '../../../componentes/CardSliders/CardSlider.jsx';
 import Podcast from '../../../componentes/AudioPlayers/Podcast.jsx';
 
-import Negreria from '../../../componentes/Cards/negreria.jsx';
-import Viejo from '../../../componentes/Cards/viejo.jsx';
-import Chunguinada from '../../../componentes/Cards/chunguinada.jsx';
-import Herranza from '../../../componentes/Cards/herranza.jsx';
+import Negreria from '../../../componentes/Cards/Negreria.jsx';
+import Viejo from '../../../componentes/Cards/Viejo.jsx';
+import Chunguinada from '../../../componentes/Cards/Chunguinada.jsx';
+import Herranza from '../../../componentes/Cards/Herranza.jsx';
 
 export default function BasicGrid() {
   return (
