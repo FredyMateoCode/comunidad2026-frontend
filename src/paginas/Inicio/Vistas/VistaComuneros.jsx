@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 
 
-import Espera from '../../../componentes/Cards/Espera.jsx'
+import Comuneros2026 from '../../../componentes/Cards/Comuneros2026.jsx'
 
 
 export default function VistaCOmuneros() {
@@ -20,10 +19,10 @@ export default function VistaCOmuneros() {
             width: '100%',            // Asegura que ocupe el 100% del ancho disponible
           }}
         >
-          <Typography variant="h4">Soy la Vista Datos de Comunero</Typography>
+          <Typography variant="h4">Padrón General de Comuneros 2026</Typography>
         </Box>
-        <Grid size={{ xs: 12, md:3 }}>
-           <Espera />
+        <Grid size={{ xs: 12, md:3, lg:12}}>
+           <Comuneros2026 />
         </Grid>
       </Grid>
       <Typography variant="body1">

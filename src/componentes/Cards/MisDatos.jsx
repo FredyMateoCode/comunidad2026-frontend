@@ -1,3 +1,4 @@
+// <-- Componente para mostrar los datos de un comunero en base a su dni dede comuneros2025
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // <-- Importamos para la navegación
 import { Card, CardContent, Typography, Avatar, Box, CircularProgress, Alert, Divider, Grid, Button } from '@mui/material';
@@ -63,7 +64,7 @@ export default function MisDatosCard() {
           {comunero?.nombres_com} {comunero?.apellidos_com}
         </Typography>
         <Typography variant="subtitle2" sx={{ opacity: 0.85, mt: 0.5 }}>
-          DATOS DEL COMUNERO PARA EL CARNET
+          DATOS DEL COMUNERO REGISTRADOS EL 2022
         </Typography>
       </Box>
 
@@ -163,7 +164,7 @@ export default function MisDatosCard() {
                 }
               }}
             >
-              Generar Ficha de Reempadronamiento (PDF)
+              Generar Anexo 001 (PDF)
             </Button>
           </Grid>
 

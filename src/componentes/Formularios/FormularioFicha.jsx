@@ -1,3 +1,4 @@
+//Componente que genera el card de perfil del comunero y el anexo 001 en pdf
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -110,12 +111,12 @@ export default function FormularioFicha() {
 
       // --- TÍTULOS ALINEADOS A LA DERECHA DEL LOGO ---
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
+      doc.setFontSize(13);
       // Ajustamos la coordenada X a 112 para centrar el texto en el espacio restante
-      doc.text("PADRÓN GENERAL DE COMUNEROS 2026", 112, 18, { align: "center" });
+      doc.text("COMUNIDAD CAMPESINA DE HUAYLLAY REEMPADRONAMIENTO 2026", 112, 18, { align: "center" });
 
       doc.setFontSize(12);
-      doc.text("FICHA FAMILIAR DE REEMPADRONAMIENTO", 112, 25, { align: "center" });
+      doc.text("FICHA DE DATOS PERSONALES, FAMILIARES Y CARGOS", 112, 25, { align: "center" });
 
       // Línea divisoria debajo del encabezado
       doc.line(15, 34, 195, 34);
@@ -263,7 +264,7 @@ export default function FormularioFicha() {
       
       <Paper component="form" onSubmit={manejarGeneracionPDF} sx={{ p: 4, borderRadius: 2 }} elevation={3}>
         <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#02306f' }}>
-          COMPLETAR FICHA DE REEMPADRONAMIENTO GENERAL2026
+          COMPLETAR FICHA DE REEMPADRONAMIENTO GENERAL 2026
         </Typography>
         <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#02306f' }}>
           ANEXO 001

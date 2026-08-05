@@ -5,8 +5,6 @@ import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 
 import MisDatos from '../../../componentes/Cards/MisDatos.jsx';
-import Espera from '../../../componentes/Cards/Espera.jsx';
-import Espera2 from '../../../componentes/Cards/Espera2.jsx';
 
 export default function VistaNoticias() {
   return (

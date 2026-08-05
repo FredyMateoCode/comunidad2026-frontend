@@ -12,16 +12,16 @@ const Login = lazy(() => import("./paginas/Login/Login"));
 const Dashboard = lazy(() => import("./paginas/Dashboard/Dashboard"));
 
 
-//Sección de la página publica
+//Sección de la página pública
 const VistaConvocatorias = lazy(() => import("./paginas/Inicio/Vistas/VistaConvocatorias.jsx"));
 const VistaEspera = lazy(() => import("./paginas/Inicio/Vistas/VistaEspera.jsx"));
 const VistaEspera2 = lazy(() => import("./paginas/Inicio/Vistas/VistaEspera2.jsx"));
+
+//Vistas de la sección Privada - despues del login
 const VistaMisDatos = lazy(() => import("./paginas/Inicio/Vistas/VistaMisDatos.jsx"));
 
+//Importación de Formularios
 import FormularioFicha from './componentes/Formularios/FormularioFicha.jsx';
-
-
-
 
 // Componentes de las vistas Dashboard (hijos)
 const VistaInicio = lazy(() => import("./paginas/Inicio/Vistas/VistaInicio.jsx"));
