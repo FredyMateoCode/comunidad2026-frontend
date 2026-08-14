@@ -12,13 +12,13 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 // Subcomponentes
 import FichaHeader from './FichaHeader';
-import TabDatosPersonales from './tabs/TabDatosPersonales';
-import TabFamilia from './tabs/TabFamilia';
-import TabAsambleas from './tabs/TabAsambleas';
-import TabCargos from './tabs/TabCargos';
-import TabFaenas from './tabs/TabFaenas';
-import TabAntecedentes from './tabs/TabAntecedentes';
-import TabAntepasados from './tabs/TabAntepasados';
+import TabDatosPersonales from './Tabs/TabDatosPersonales';
+import TabFamilia from './Tabs/TabFamilia';
+import TabAsambleas from './Tabs/TabAsambleas';
+import TabCargos from './Tabs/TabCargos';
+import TabFaenas from './Tabs/TabFaenas';
+import TabAntecedentes from './Tabs/TabAntecedentes';
+import TabAntepasados from './Tabs/TabAntepasados';
 
 export default function FichaComunero({ ficha, onEditar, onToggleEstado }) {
   const [tabIndex, setTabIndex] = useState(0);
