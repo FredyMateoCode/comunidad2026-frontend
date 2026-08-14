@@ -5,7 +5,7 @@ import ChildCareIcon from '@mui/icons-material/ChildCare';
 
 import CardDato from '../CardDato';
 import CardVacia from '../CardVacia';
-import { calcularEdad } from '../utils';
+import { calcularEdad } from '../Utils';
 
 export default function TabFamilia({ ficha }) {
   return (
