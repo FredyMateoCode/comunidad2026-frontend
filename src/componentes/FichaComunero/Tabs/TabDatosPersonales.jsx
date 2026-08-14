@@ -14,7 +14,7 @@ import AirlineSeatFlatIcon from '@mui/icons-material/AirlineSeatFlat';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import CardDato from '../CardDato';
-import { calcularEdad } from '../utils';
+import { calcularEdad } from '../Utils';
 
 export default function TabDatosPersonales({ ficha }) {
   return (
