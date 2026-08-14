@@ -4,7 +4,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 export default function FichaHeader({ ficha, onEditar, onToggleEstado }) {
-  const rutaFoto = `/src/assets/imagenes/fotos/${ficha.dni_com}.jpg?t=${Date.now()}`;
+  // Vite elegirá automáticamente el valor según el entorno (Supabase en Netlify, assets en Local)
+  const baseUrl = import.meta.env.VITE_STORAGE_URL;
+  const rutaFoto = `${baseUrl}/${ficha.dni_com}.jpg?t=${Date.now()}`;
   
   // 1 = Activo, 0 = Desactivado
   const esActivo = Number(ficha.estado_com) === 1;
