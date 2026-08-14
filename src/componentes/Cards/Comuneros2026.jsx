@@ -2,20 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { 
   Box, Typography, CircularProgress, Alert, Button, Paper, 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
-  Chip, TablePagination, TextField, InputAdornment 
+  Chip, TablePagination, TextField, InputAdornment, Stack
 } from '@mui/material';
 import BadgeIcon from '@mui/icons-material/Badge';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SearchIcon from '@mui/icons-material/Search';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 
 // Servicio que consume desde el backend
-import api from '../../servicios/api.js'; 
+import api from '../../servicios/api.js';
+
+// Modal de Creación
+import { ModalCrearComunero } from '../Modals/ModalCrearComunero.jsx';
 
 export default function Comuneros2026({ onVerFicha }) {
-  //Estados Iniciales
+  // Estados Iniciales
   const [comuneros, setComuneros] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+
+  // Estado para el modal de inserción
+  const [openCrear, setOpenCrear] = useState(false);
 
   // Estado para el filtro de búsqueda
   const [busqueda, setBusqueda] = useState('');
@@ -24,22 +33,28 @@ export default function Comuneros2026({ onVerFicha }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    const obtenerComuneros = async () => {
-      try {
-        setCargando(true);
-        const respuesta = await api.get('/api/comuneros2026');
-        setComuneros(respuesta.data);
-      } catch (err) {
-        console.error("Error al obtener el padrón de comuneros:", err);
-        setError(err.response?.data?.mensaje || 'No se pudo conectar con el servidor.');
-      } finally {
-        setCargando(false);
-      }
-    };
+  // Función para obtener comuneros desde la API
+  const obtenerComuneros = async () => {
+    try {
+      setCargando(true);
+      const respuesta = await api.get('/api/comuneros2026');
+      setComuneros(respuesta.data);
+    } catch (err) {
+      console.error("Error al obtener el padrón de comuneros:", err);
+      setError(err.response?.data?.mensaje || 'No se pudo conectar con el servidor.');
+    } finally {
+      setCargando(false);
+    }
+  };
 
+  useEffect(() => {
     obtenerComuneros();
   }, []);
+
+  // Manejador que se ejecuta tras registrar exitosamente a un comunero
+  const handleGuardarExitoso = () => {
+    obtenerComuneros(); // Recarga la lista para mostrar al nuevo comunero inmediatamente
+  };
 
   // Manejadores de eventos de la paginación
   const handleChangePage = (event, newPage) => {
@@ -86,21 +101,28 @@ export default function Comuneros2026({ onVerFicha }) {
   return (
     <Box sx={{ width: '100%', p: 2, boxSizing: 'border-box' }}>
       
-      {/* Encabezado con Titulo, Buscador y Contador */}
+      {/* Encabezado con Titulo, Buscador, Botón Agregar y Contador */}
       <Box sx={{ 
         display: 'flex', 
         flexDirection: { xs: 'column', sm: 'row' }, 
-        justify: 'space-between', 
+        justifyContent: 'space-between', 
         alignItems: { xs: 'stretch', sm: 'center' }, 
         gap: 2, 
         mb: 2, 
         width: '100%' 
       }}>
         <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#02306f' }}>
-          Padrón de Comuneros 2026
+          Comuneros Registrados 2026
         </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: { sm: 0, md: 1 }, justifyContent: 'flex-end' }}>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1.5, 
+          flexGrow: { sm: 0, md: 1 }, 
+          justifyContent: 'flex-end',
+          flexWrap: 'wrap' 
+        }}>
           {/* Campo de búsqueda */}
           <TextField
             placeholder="Buscar por DNI o Apellido..."
@@ -109,10 +131,10 @@ export default function Comuneros2026({ onVerFicha }) {
             value={busqueda}
             onChange={(e) => {
               setBusqueda(e.target.value);
-              setPage(0); // Resetea a la primera página al escribir
+              setPage(0);
             }}
             sx={{ 
-              width: { xs: '100%', sm: '300px' },
+              width: { xs: '100%', sm: '260px' },
               bgcolor: 'white',
               borderRadius: 1
             }}
@@ -124,6 +146,26 @@ export default function Comuneros2026({ onVerFicha }) {
               ),
             }}
           />
+
+          {/* ➕ Botón Nuevo Comunero */}
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<PersonAddIcon />}
+            onClick={() => setOpenCrear(true)}
+            sx={{
+              fontWeight: 'bold',
+              textTransform: 'none',
+              borderRadius: 1.5,
+              height: '40px',
+              bgcolor: '#2e7d32',
+              '&:hover': {
+                bgcolor: '#1b5e20'
+              }
+            }}
+          >
+            Nuevo
+          </Button>
 
           {/* Contador que muestra los filtrados / totales */}
           <Chip 
@@ -198,26 +240,76 @@ export default function Comuneros2026({ onVerFicha }) {
                       </TableCell>
 
                       <TableCell align="center">
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<AssignmentIcon />}
-                          onClick={() => onVerFicha && onVerFicha(comunero.dni_com)}
-                          sx={{
-                            bgcolor: '#02306f',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            borderRadius: 2,
-                            textTransform: 'none',
-                            boxShadow: 1,
-                            '&:hover': {
-                              bgcolor: '#008ef7',
-                              boxShadow: 2
-                            }
-                          }}
+                        <Stack 
+                          direction="row" 
+                          spacing={1} 
+                          justifyContent="center" 
+                          alignItems="center"
                         >
-                          Ver Ficha
-                        </Button>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<AssignmentIcon />}
+                            onClick={() => onVerFicha && onVerFicha(comunero.dni_com)}
+                            sx={{
+                              bgcolor: '#02306f',
+                              color: 'white',
+                              fontWeight: 'bold',
+                              borderRadius: 2,
+                              textTransform: 'none',
+                              boxShadow: 1,
+                              '&:hover': {
+                                bgcolor: '#008ef7',
+                                boxShadow: 2
+                              }
+                            }}
+                          >
+                            Ficha
+                          </Button>
+
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<BadgeIcon />}
+                            onClick={() => onVerFicha && onVerFicha(comunero.dni_com)}
+                            sx={{
+                              bgcolor: '#199600',
+                              color: 'white',
+                              fontWeight: 'bold',
+                              borderRadius: 2,
+                              textTransform: 'none',
+                              boxShadow: 1,
+                              '&:hover': {
+                                bgcolor: '#0a3e00',
+                                boxShadow: 2
+                              }
+                            }}
+                          >
+                            Constancia
+                          </Button>
+
+                          <Button
+                            variant="contained"
+                            size="small"
+                            startIcon={<LocalPrintshopIcon />}
+                            onClick={() => onVerFicha && onVerFicha(comunero.dni_com)}
+                            sx={{
+                              bgcolor: '#ff6a00',
+                              color: 'white',
+                              fontWeight: 'bold',
+                              borderRadius: 2,
+                              textTransform: 'none',
+                              boxShadow: 1,
+                              '&:hover': {
+                                bgcolor: '#a04300',
+                                boxShadow: 2
+                              }
+                            }}
+                          >
+                            Imprimir
+                          </Button>
+
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   ))
@@ -226,7 +318,7 @@ export default function Comuneros2026({ onVerFicha }) {
           </Table>
         </TableContainer>
 
-        {/* Paginador basado en los registros filtrados */}
+        {/* Paginador */}
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -239,6 +331,14 @@ export default function Comuneros2026({ onVerFicha }) {
           labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`}
         />
       </Paper>
+
+      {/* Modal para Crear Comunero */}
+      <ModalCrearComunero 
+        open={openCrear}
+        onClose={() => setOpenCrear(false)}
+        onGuardar={handleGuardarExitoso}
+      />
+
     </Box>
   );
 }

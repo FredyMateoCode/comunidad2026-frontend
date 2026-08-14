@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 
 import MisDatos from '../../../componentes/Cards/MisDatos.jsx';
 
-export default function VistaNoticias() {
+export default function VistaMisDatos() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={4}>

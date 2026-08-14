@@ -13,10 +13,10 @@ import {
   Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Dashboard as DashboardIcon,
   Group as GroupIcon, BarChart as BarChartIcon, ExpandLess, ExpandMore,
   Mail as MailIcon, Notifications as NotificationsIcon, ArrowDropDown as ArrowDropDownIcon,
-  Assignment as AssignmentIcon, Layers as LayersIcon
+  Assignment as AssignmentIcon, Layers as LayersIcon, Badge as BadgeIcon
 } from '@mui/icons-material';
 
-// Importaciones de activos locales
+// Importaciones de activos/componentes locales
 import imagen001 from '../../assets/imagenes/Logo.png';
 import Footer from '../../componentes/Footers/Footer';
 
@@ -33,7 +33,6 @@ export default function Dashboard() {
   let nombreUsuario = 'Administrador'; // Valor por defecto por seguridad
   let rolUsuario = 8; // Valor por defecto (Si algo falla, se queda en el rol más restringido)
 
-  // 2. Si el token existe, lo decodificamos de forma nativa
   // 2. Si el token existe, lo decodificamos de forma nativa
   if (token) {
     try {
@@ -60,7 +59,7 @@ export default function Dashboard() {
   }
 
   // Constantes fijas de diseño
-  const drawerWidth = 250;
+  const drawerWidth = 200;
   const collapsedWidth = 60;
 
   // Manejo de apertura/cierre de la UI
@@ -217,7 +216,7 @@ export default function Dashboard() {
 
             {/* Opción 'Mis Datos': ACCESO GENERAL. La ve el Rol 1, 2, 4 y por supuesto el Rol 8 */}            
             <ListItem {...getListItemProps('/misdatos')}>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemIcon><BadgeIcon /></ListItemIcon>
               {open && <ListItemText primary="Mis Datos" sx={{ color: 'black' }}  />}
             </ListItem>     
 
