@@ -22,10 +22,11 @@ export const DatosPersonalesTab = ({ formData = {}, onChange, setFormData }) => 
       .catch(err => console.error(err));
   }, []);
 
-  // Vista previa de la foto
+  // Vista previa de la foto usando la variable de entorno según el modo (dev/prod)
   useEffect(() => {
     if (formData?.dni_com) {
-      setPreviewFoto(`/src/assets/imagenes/fotos/${formData.dni_com}.jpg`);
+      const baseUrl = import.meta.env.VITE_STORAGE_URL || '/src/assets/imagenes/fotos';
+      setPreviewFoto(`${baseUrl}/${formData.dni_com}.jpg?t=${Date.now()}`);
     }
   }, [formData?.dni_com]);
 
@@ -36,52 +37,56 @@ export const DatosPersonalesTab = ({ formData = {}, onChange, setFormData }) => 
       reader.onloadend = () => setPreviewFoto(reader.result);
       reader.readAsDataURL(file);
 
-      if (onChange) {
-        onChange({ target: { name: 'foto_file', value: file } });
+      // Guardar el objeto File nativo bajo la clave 'foto'
+      if (typeof setFormData === 'function') {
+        setFormData(prev => ({
+          ...prev,
+          foto: file
+        }));
+      } else if (onChange) {
+        onChange({ target: { name: 'foto', value: file } });
       }
     }
   };
 
   // Manejo de Caserío (Actualización única de id_cas e id_usu)
-  // 1. Manejo de cambio de Caserío
-const handleCaserioChange = (e) => {
-  const nuevoIdCas = e.target.value;
+  const handleCaserioChange = (e) => {
+    const nuevoIdCas = e.target.value;
 
-  // Buscamos el objeto del caserío seleccionado en la lista que ya tenemos
-  const caserioEncontrado = listaCaserios.find(c => String(c.id_cas) === String(nuevoIdCas));
-  const nuevoNombreCas = caserioEncontrado ? caserioEncontrado.nombre_cas : '';
+    const caserioEncontrado = listaCaserios.find(c => String(c.id_cas) === String(nuevoIdCas));
+    const nuevoNombreCas = caserioEncontrado ? caserioEncontrado.nombre_cas : '';
 
-  if (typeof setFormData === 'function') {
-    setFormData(prev => ({
-      ...prev,
-      id_cas: nuevoIdCas,
-      nombre_caserio: nuevoNombreCas, // 👈 Se actualiza el nombre automáticamente
-      id_usu: '',                     // Reseteamos el ID del usufructo
-      nombre_usufructo: ''            // Reseteamos el Nombre del usufructo
-    }));
-  }
-};
+    if (typeof setFormData === 'function') {
+      setFormData(prev => ({
+        ...prev,
+        id_cas: nuevoIdCas,
+        nombre_caserio: nuevoNombreCas,
+        id_usu: '',
+        nombre_usufructo: ''
+      }));
+    } else if (onChange) {
+      onChange({ target: { name: 'id_cas', value: nuevoIdCas } });
+    }
+  };
 
-// 2. Manejo de cambio de Usufructo
-const handleUsufructoChange = (e) => {
-  const nuevoIdUsu = e.target.value;
+  // Manejo de cambio de Usufructo
+  const handleUsufructoChange = (e) => {
+    const nuevoIdUsu = e.target.value;
 
-  // Buscamos el objeto del usufructo seleccionado en la lista
-  const usufructoEncontrado = listaUsufructos.find(u => String(u.id_usu) === String(nuevoIdUsu));
-  const nuevoNombreUsu = usufructoEncontrado ? usufructoEncontrado.nombre_usu : '';
+    const usufructoEncontrado = listaUsufructos.find(u => String(u.id_usu) === String(nuevoIdUsu));
+    const nuevoNombreUsu = usufructoEncontrado ? usufructoEncontrado.nombre_usu : '';
 
-  if (typeof setFormData === 'function') {
-    setFormData(prev => ({
-      ...prev,
-      id_usu: nuevoIdUsu,
-      nombre_usufructo: nuevoNombreUsu // 👈 Se actualiza el nombre automáticamente
-    }));
-  } else if (onChange) {
-    // Si usas el onChange estándar del padre
-    onChange({ target: { name: 'id_usu', value: nuevoIdUsu } });
-    onChange({ target: { name: 'nombre_usufructo', value: nuevoNombreUsu } });
-  }
-};
+    if (typeof setFormData === 'function') {
+      setFormData(prev => ({
+        ...prev,
+        id_usu: nuevoIdUsu,
+        nombre_usufructo: nuevoNombreUsu
+      }));
+    } else if (onChange) {
+      onChange({ target: { name: 'id_usu', value: nuevoIdUsu } });
+      onChange({ target: { name: 'nombre_usufructo', value: nuevoNombreUsu } });
+    }
+  };
 
   // Filtrado flexible tolerante a String y Number
   const usufructosFiltrados = listaUsufructos.filter(
@@ -107,18 +112,16 @@ const handleUsufructoChange = (e) => {
 
         <Box sx={{ display: 'flex', flex: 1, gap: 2, flexWrap: 'wrap' }}>
 
-          {/* Campo con límite de caracteres */}
           <TextField
             sx={{ flex: '1 1 45%' }}
             label="Carné"
             name="num_carne_com"
             value={formData?.num_carne_com || ''}
             onChange={(e) => {
-              // Si el valor supera los 4 dígitos, recortamos a los primeros 4
               if (e.target.value.length > 4) {
                 e.target.value = e.target.value.slice(0, 4);
               }
-              onChange(e); // Ejecutamos la función onChange original
+              onChange(e);
             }}
             slotProps={{
               htmlInput: {
@@ -129,18 +132,16 @@ const handleUsufructoChange = (e) => {
             size="small"
           />
 
-          {/* Campo con límite de caracteres */}
           <TextField
             sx={{ flex: '1 1 45%' }}
             label="DNI"
             name="dni_com"
             value={formData?.dni_com || ''}
             onChange={(e) => {
-              // Si el valor supera los 4 dígitos, recortamos a los primeros 4
               if (e.target.value.length > 8) {
                 e.target.value = e.target.value.slice(0, 8);
               }
-              onChange(e); // Ejecutamos la función onChange original
+              onChange(e);
             }}
             slotProps={{
               htmlInput: {
@@ -170,7 +171,7 @@ const handleUsufructoChange = (e) => {
         <TextField sx={{ flex: '1 1 30%' }} label="Apellido Materno" name="ap_materno_com" value={formData?.ap_materno_com || ''} onChange={onChange} size="small" />
       </Box>
 
-      {/* Campo con límite de caracteres */}
+      {/* Teléfono y Grado de Instrucción */}
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         <TextField
           sx={{ flex: '1 1 30%' }}
@@ -178,11 +179,10 @@ const handleUsufructoChange = (e) => {
           name="celular_com"
           value={formData?.celular_com || ''}
           onChange={(e) => {
-            // Si el valor supera los 4 dígitos, recortamos a los primeros 4
             if (e.target.value.length > 9) {
               e.target.value = e.target.value.slice(0, 9);
             }
-            onChange(e); // Ejecutamos la función onChange original
+            onChange(e);
           }}
           slotProps={{
             htmlInput: {
@@ -215,11 +215,10 @@ const handleUsufructoChange = (e) => {
           name="anio_ingreso_com"
           value={formData?.anio_ingreso_com || ''}
           onChange={(e) => {
-            // Si el valor supera los 4 dígitos, recortamos a los primeros 4
             if (e.target.value.length > 4) {
               e.target.value = e.target.value.slice(0, 4);
             }
-            onChange(e); // Ejecutamos la función onChange original
+            onChange(e);
           }}
           slotProps={{
             htmlInput: {
@@ -232,7 +231,7 @@ const handleUsufructoChange = (e) => {
 
       </Box>
 
-      {/* SELECTORES DEPENDIENTES */}
+      {/* Selectores Dependientes */}
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         
         {/* Selector de Caserío */}
@@ -261,7 +260,7 @@ const handleUsufructoChange = (e) => {
           label="Usufructo"
           name="id_usu"
           value={formData?.id_usu ?? ''}
-          onChange={handleUsufructoChange} // 👈 Usamos la función que busca el nombre
+          onChange={handleUsufructoChange}
           size="small"
           disabled={!formData?.id_cas}
         >
