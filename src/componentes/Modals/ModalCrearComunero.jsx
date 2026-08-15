@@ -11,7 +11,7 @@ const estadoInicial = {
   nombres_com: '',
   ap_paterno_com: '',
   ap_materno_com: '',
-  est_civil_com: 'SOLTERO', // 🟢 Única propiedad para el Estado Civil
+  est_civil_com: 'SOLTERO',
   genero_com: 'MASCULINO',
   condicion_com: 'INTEGRADO',
   g_instruccion_com: '',
@@ -24,8 +24,8 @@ const estadoInicial = {
   id_usu: '',
   nombre_usufructo: '',
 
-  // Archivo
-  foto_file: null,
+  // Archivo (🟢 Usamos 'foto' para alinearnos con los componentes reutilizados)
+  foto: null,
 
   // Tabs / Arrays de Pestañas
   datos_conyuge: {},
@@ -84,7 +84,7 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
     } else {
       setFormData((prev) => {
         const copia = { ...prev, [name]: value };
-        delete copia.estado_civil_com; // 🟢 Garantizamos que nunca exista la clave duplicada
+        delete copia.estado_civil_com;
         return copia;
       });
     }
@@ -117,8 +117,8 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
         dni_com: dniLimpio
       };
 
-      // 1. Excluimos los arrays auxiliares y el objeto file para enviarlos de forma limpia
-      const clavesAExcluir = ['caserios', 'listaCaserios', 'caserio', 'foto_file', 'estado_civil_com'];
+      // 1. Excluimos auxiliares, duplicados y fotos para procesarlas aparte
+      const clavesAExcluir = ['caserios', 'listaCaserios', 'caserio', 'foto', 'foto_file', 'estado_civil_com'];
 
       // 2. Procesa y adjunta cada clave
       Object.keys(payloadOriginal).forEach((key) => {
@@ -134,9 +134,14 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
         }
       });
 
-      // 3. Adjunta la foto si existe
-      if (formData.foto_file instanceof File) {
-        dataPayload.append('foto', formData.foto_file);
+      // 3. 🟢 Adjuntamos la foto buscando el objeto File nativo
+      const archivoFoto = (formData.foto instanceof File) ? formData.foto : formData.foto_file;
+
+      if (archivoFoto instanceof File) {
+        dataPayload.append('foto', archivoFoto);
+        console.log("📸 Foto adjuntada al FormData correctamente:", archivoFoto.name);
+      } else {
+        console.warn("⚠️ No se seleccionó archivo de foto o no es un objeto File válido.");
       }
 
       // 🔍 Log de depuración
