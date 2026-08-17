@@ -13,8 +13,11 @@ import {
   Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Dashboard as DashboardIcon,
   Group as GroupIcon, BarChart as BarChartIcon, ExpandLess, ExpandMore,
   Mail as MailIcon, Notifications as NotificationsIcon, ArrowDropDown as ArrowDropDownIcon,
-  Assignment as AssignmentIcon, Layers as LayersIcon, Badge as BadgeIcon
+  Assignment as AssignmentIcon, Layers as LayersIcon, Badge as BadgeIcon, StackedBarChart as StackedBarChartIcon,
+  GroupAdd as GroupAddIcon
 } from '@mui/icons-material';
+
+
 
 // Importaciones de activos/componentes locales
 import imagen001 from '../../assets/imagenes/Logo.png';
@@ -203,6 +206,22 @@ export default function Dashboard() {
               <ListItem {...getListItemProps('')}>
                 <ListItemIcon><DashboardIcon /></ListItemIcon>
                 {open && <ListItemText primary="Inicio" sx={{ color: 'black' }}  />}
+              </ListItem>
+            )}
+
+            {/* Filtro por Rol: Opción 'Comuneros' solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <ListItem {...getListItemProps('/dashboardGraficos')}>
+                <ListItemIcon><StackedBarChartIcon /></ListItemIcon>
+                {open && <ListItemText primary="Dashboard" sx={{ color: 'black' }}  />}
+              </ListItem>
+            )}
+
+            {/* Filtro por Rol: Opción 'Comuneros' solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <ListItem {...getListItemProps('/usuarios')}>
+                <ListItemIcon><GroupAddIcon /></ListItemIcon>
+                {open && <ListItemText primary="Usuarios" sx={{ color: 'black' }}  />}
               </ListItem>
             )}
             

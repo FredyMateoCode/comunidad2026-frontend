@@ -19,6 +19,8 @@ const VistaEspera2 = lazy(() => import("./paginas/Inicio/Vistas/VistaEspera2.jsx
 
 //Vistas de la sección Privada - despues del login
 const VistaMisDatos = lazy(() => import("./paginas/Inicio/Vistas/VistaMisDatos.jsx"));
+const VistaUsuarios = lazy(() => import("./paginas/Inicio/Vistas/VistaUsuarios.jsx"));
+const VistaDashboard = lazy(() => import("./paginas/Inicio/Vistas/DashboardVista.jsx"));
 
 //Importación de Formularios
 import FormularioFicha from './componentes/Formularios/FormularioFicha.jsx';
@@ -82,6 +84,8 @@ export default function App() {
 
               {/* 🔒 RUTAS EXCLUSIVAS PARA EL ROL ADMINISTRADOR (Rol 1) */}
               <Route element={<RutaPrivada rolesPermitidos={[1]} />}>
+                <Route path="dashboardGraficos" element={<VistaDashboard />} />
+                <Route path="usuarios" element={<VistaUsuarios />} />
                 <Route path="comuneros" element={<VistaComuneros />} />
                 <Route path="reportes/espera" element={<VistaEspera />} />
                 <Route path="reportes/espera2" element={<VistaEspera2 />} />
