@@ -14,8 +14,10 @@ import {
   Group as GroupIcon, BarChart as BarChartIcon, ExpandLess, ExpandMore,
   Mail as MailIcon, Notifications as NotificationsIcon, ArrowDropDown as ArrowDropDownIcon,
   Assignment as AssignmentIcon, Layers as LayersIcon, Badge as BadgeIcon, StackedBarChart as StackedBarChartIcon,
-  GroupAdd as GroupAddIcon
+  GroupAdd as GroupAddIcon, Groups3 as Groups3Icon, Construction as ConstructionIcon, Loupe as LoupeIcon,
+  Checklist as ChecklistIcon, ControlPoint as ControlPointIcon, FactCheck as FactCheckIcon
 } from '@mui/icons-material';
+
 
 
 
@@ -24,9 +26,11 @@ import imagen001 from '../../assets/imagenes/Logo.png';
 import Footer from '../../componentes/Footers/Footer';
 
 export default function Dashboard() {
-  // Estados para controlar la UI básica y el submenú
+  // Estados para controlar la UI básica y el submenú 001
   const [open, setOpen] = useState(true);
   const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [submenuOpen2, setSubmenuOpen2] = useState(false);
+  const [submenuOpen3, setSubmenuOpen3] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,6 +72,8 @@ export default function Dashboard() {
   // Manejo de apertura/cierre de la UI
   const toggleDrawer = () => setOpen(!open);
   const toggleSubmenu = () => setSubmenuOpen(!submenuOpen);
+  const toggleSubmenu2 = () => setSubmenuOpen2(!submenuOpen2);
+  const toggleSubmenu3 = () => setSubmenuOpen3(!submenuOpen3);
   const openMenu = Boolean(anchorEl); 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget); 
   const handleMenuClose = () => setAnchorEl(null);
@@ -237,7 +243,86 @@ export default function Dashboard() {
             <ListItem {...getListItemProps('/misdatos')}>
               <ListItemIcon><BadgeIcon /></ListItemIcon>
               {open && <ListItemText primary="Mis Datos" sx={{ color: 'black' }}  />}
-            </ListItem>     
+            </ListItem>  
+
+
+
+            {/* Filtro por Rol: Bloque completo de 'Reportes' (Submenú e Hijos) solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <>
+                <ListItem
+                  onClick={toggleSubmenu2}
+                  sx={{
+                    cursor: 'pointer',
+                    bgcolor: submenuOpen2 ? 'rgba(0, 0, 0, 0.04)' : 'inherit',
+                    borderRadius: 2, marginX: 0.5,
+                    '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.08)' }
+                  }}
+                >
+                  <ListItemIcon><Groups3Icon /></ListItemIcon>
+                  {open && <ListItemText primary="Asambleas" sx={{ color: 'black' }} />}
+                  {open && (submenuOpen2 ? <ExpandLess /> : <ExpandMore />)}
+                </ListItem>
+
+                {/* Submenú Asambleas */}
+                <Collapse in={submenuOpen2} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding sx={{ pl: open ? 4 : 2 }}>
+                    
+                    {/* 🔴 CAMBIO: Usar ruta propia para Asambleas -> Crear */}
+                    <ListItem {...getListItemProps('/asambleas/asambleas')}>
+                      <ListItemIcon><LoupeIcon /></ListItemIcon>
+                      {open && <ListItemText primary="Crear" sx={{ color: 'black' }} />}
+                    </ListItem>
+
+                    {/* 🔴 CAMBIO: Usar ruta propia para Asambleas -> Asistencias */}
+                    <ListItem {...getListItemProps('/asambleas/asistenciaAsamblea')}>
+                      <ListItemIcon><ChecklistIcon /></ListItemIcon>
+                      {open && <ListItemText primary="Asistencias" sx={{ color: 'black' }} />}
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </>
+            )}
+
+
+
+
+            {/* Filtro por Rol: Bloque completo de 'Reportes' (Submenú e Hijos) solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <>
+                <ListItem
+                  onClick={toggleSubmenu3}
+                  sx={{
+                    cursor: 'pointer',
+                    bgcolor: submenuOpen3 ? 'rgba(0, 0, 0, 0.04)' : 'inherit',
+                    borderRadius: 2, marginX: 0.5,
+                    '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.08)' }
+                  }}
+                >
+                  <ListItemIcon><ConstructionIcon /></ListItemIcon>
+                  {open && <ListItemText primary="Faenas" sx={{ color: 'black' }} />}
+                  {open && (submenuOpen3 ? <ExpandLess /> : <ExpandMore />)}
+                </ListItem>
+
+                {/* Submenú Asambleas */}
+                <Collapse in={submenuOpen3} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding sx={{ pl: open ? 4 : 2 }}>
+                    
+                    {/* 🔴 CAMBIO: Usar ruta propia para Asambleas -> Crear */}
+                    <ListItem {...getListItemProps('/faenas/faenas')}>
+                      <ListItemIcon><ControlPointIcon /></ListItemIcon>
+                      {open && <ListItemText primary="Crear" sx={{ color: 'black' }} />}
+                    </ListItem>
+
+                    {/* 🔴 CAMBIO: Usar ruta propia para Asambleas -> Asistencias */}
+                    <ListItem {...getListItemProps('/faenas/asistenciaFaena')}>
+                      <ListItemIcon><FactCheckIcon /></ListItemIcon>
+                      {open && <ListItemText primary="Asistencias" sx={{ color: 'black' }} />}
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </>
+            )}
 
             {/* Filtro por Rol: Bloque completo de 'Reportes' (Submenú e Hijos) solo para 1, 2 y 4 */}
             {rolesAdministrativos.includes(rolUsuario) && (
