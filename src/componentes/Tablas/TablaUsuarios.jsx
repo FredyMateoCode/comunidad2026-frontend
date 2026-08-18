@@ -24,10 +24,46 @@ import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar, onCambiarEstado }) {
+// Importación del Modal
+import ModalCrearUsuario from '../Modals/ModalCrearUsuario';
+
+export default function TablaUsuarios({ datos = [], cargando, onGuardarUsuario, onCambiarEstado }) {
   const [busqueda, setBusqueda] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // Estados locales para el control del Modal
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [usuarioEditar, setUsuarioEditar] = useState(null);
+
+  // Abrir modal para crear nuevo
+  const handleAbrirCrear = () => {
+    setUsuarioEditar(null);
+    setModalAbierto(true);
+  };
+
+  // Abrir modal para editar un registro existente
+  const handleAbrirEditar = (usuario) => {
+    setUsuarioEditar(usuario);
+    setModalAbierto(true);
+  };
+
+  // Cerrar modal
+  const handleCerrarModal = () => {
+    setModalAbierto(false);
+    setUsuarioEditar(null);
+  };
+
+  // Enviar los datos del formulario al padre o API
+  const handleSubmitModal = (formData, isEditing) => {
+    console.log("=== DATOS A ENVIAR AL BACKEND ===");
+    console.log("Modo:", isEditing ? "Edición" : "Creación");
+    console.log("Payload:", formData);
+    if (onGuardarUsuario) {
+      onGuardarUsuario(formData, isEditing);
+    }
+    handleCerrarModal();
+  };
 
   // Filtrado global en tiempo real por DNI, Nombres, Apellidos o Usuario
   const usuariosFiltrados = datos.filter((u) => {
@@ -52,7 +88,7 @@ export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar,
 
   const handleBusquedaChange = (e) => {
     setBusqueda(e.target.value);
-    setPage(0); // Reiniciar a la primera página al buscar
+    setPage(0);
   };
 
   if (cargando) {
@@ -81,7 +117,7 @@ export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar,
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
-          onClick={onNuevo}
+          onClick={handleAbrirCrear}
         >
           Nuevo Usuario
         </Button>
@@ -121,7 +157,7 @@ export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar,
                   </TableCell>
                   <TableCell align="center">
                     <Tooltip title="Editar">
-                      <IconButton color="primary" size="small" onClick={() => onEditar(u)}>
+                      <IconButton color="primary" size="small" onClick={() => handleAbrirEditar(u)}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -129,7 +165,7 @@ export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar,
                       <IconButton
                         color={u.estado_us === 1 ? 'error' : 'success'}
                         size="small"
-                        onClick={() => onCambiarEstado(u)}
+                        onClick={() => onCambiarEstado && onCambiarEstado(u)}
                       >
                         {u.estado_us === 1 ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
                       </IconButton>
@@ -159,6 +195,14 @@ export default function TablaUsuarios({ datos = [], cargando, onNuevo, onEditar,
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage="Filas por página:"
         labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+      />
+
+      {/* Renderizado del Modal */}
+      <ModalCrearUsuario
+        isOpen={modalAbierto}
+        onClose={handleCerrarModal}
+        onSubmit={handleSubmitModal}
+        initialData={usuarioEditar}
       />
     </Paper>
   );
