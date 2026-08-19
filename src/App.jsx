@@ -25,6 +25,8 @@ const VistaAsambleas = lazy(() => import("./paginas/Inicio/Vistas/VistaAsambleas
 const VistaFaenas = lazy(() => import("./paginas/Inicio/Vistas/VistaFaenas.jsx"));
 const VistaAsistAsam = lazy(() => import("./paginas/Inicio/Vistas/VistaAsistenciaAsamblea.jsx"));
 const VistaAsistFaena = lazy(() => import("./paginas/Inicio/Vistas/VistaAsistenciaFaena.jsx"));
+const VistaUsufructos = lazy(() => import("./paginas/Inicio/Vistas/VistaUsufructos.jsx"));
+const VistaHistorial = lazy(() => import("./paginas/Inicio/Vistas/VistaHistorial.jsx"));
 
 //Importación de Formularios
 import FormularioFicha from './componentes/Formularios/FormularioFicha.jsx';
@@ -90,13 +92,20 @@ export default function App() {
               <Route element={<RutaPrivada rolesPermitidos={[1]} />}>
                 <Route path="dashboardGraficos" element={<VistaDashboard />} />
                 <Route path="usuarios" element={<VistaUsuarios />} />
-                <Route path="comuneros" element={<VistaComuneros />} />
+                
+                <Route path="usufructos" element={<VistaUsufructos />} />
+                <Route path="historial" element={<VistaHistorial />} />
                 <Route path="asambleas/asambleas" element={<VistaAsambleas />} />
                 <Route path="asambleas/asistenciaAsamblea" element={<VistaAsistAsam />} />
                 <Route path="faenas/faenas" element={<VistaFaenas />} />
                 <Route path="faenas/asistenciaFaena" element={<VistaAsistFaena />} />
                 <Route path="reportes/espera" element={<VistaEspera />} />
                 <Route path="reportes/espera2" element={<VistaEspera2 />} />
+              </Route>
+
+              {/* 🔒 RUTA PERMITIDA PARA ADMINISTRADOR (1) Y REGISTRADOR (7) */}
+              <Route element={<RutaPrivada rolesPermitidos={[1, 7]} />}>
+                <Route path="comuneros" element={<VistaComuneros />} />
               </Route>
             </Route>
           </Route>

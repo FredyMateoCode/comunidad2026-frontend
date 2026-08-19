@@ -15,9 +15,9 @@ import {
   Mail as MailIcon, Notifications as NotificationsIcon, ArrowDropDown as ArrowDropDownIcon,
   Assignment as AssignmentIcon, Layers as LayersIcon, Badge as BadgeIcon, StackedBarChart as StackedBarChartIcon,
   GroupAdd as GroupAddIcon, Groups3 as Groups3Icon, Construction as ConstructionIcon, Loupe as LoupeIcon,
-  Checklist as ChecklistIcon, ControlPoint as ControlPointIcon, FactCheck as FactCheckIcon
+  Checklist as ChecklistIcon, ControlPoint as ControlPointIcon, FactCheck as FactCheckIcon, Agriculture as AgricultureIcon,
+  Restore as RestoreIcon
 } from '@mui/icons-material';
-
 
 
 
@@ -127,6 +127,9 @@ export default function Dashboard() {
   // Roles autorizados que tienen permiso para ver TODO el menú administrativo
   const rolesAdministrativos = [1, 2, 4];
 
+  // 🟢 AGREGAR: Roles con acceso al menú Comuneros (Administrativos + Rol 7)
+  const rolesComuneros = [1, 2, 4, 7];
+
   return (
     <>
       <CssBaseline /> 
@@ -232,10 +235,26 @@ export default function Dashboard() {
             )}
             
             {/* Filtro por Rol: Opción 'Comuneros' solo para 1, 2 y 4 */}
-            {rolesAdministrativos.includes(rolUsuario) && (
+            {rolesComuneros.includes(rolUsuario) && (
               <ListItem {...getListItemProps('/comuneros')}>
                 <ListItemIcon><GroupIcon /></ListItemIcon>
                 {open && <ListItemText primary="Comuneros" sx={{ color: 'black' }}  />}
+              </ListItem>
+            )}
+
+            {/* Filtro por Rol: Opción 'Comuneros' solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <ListItem {...getListItemProps('/usufructos')}>
+                <ListItemIcon><AgricultureIcon /></ListItemIcon>
+                {open && <ListItemText primary="Usufructos" sx={{ color: 'black' }}  />}
+              </ListItem>
+            )}
+
+            {/* Filtro por Rol: Opción 'Comuneros' solo para 1, 2 y 4 */}
+            {rolesAdministrativos.includes(rolUsuario) && (
+              <ListItem {...getListItemProps('/historial')}>
+                <ListItemIcon><RestoreIcon /></ListItemIcon>
+                {open && <ListItemText primary="Historial" sx={{ color: 'black' }}  />}
               </ListItem>
             )}
 
