@@ -1,12 +1,47 @@
-import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Grid, CircularProgress } from '@mui/material';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import CardDato from '../CardDato';
 import CardVacia from '../CardVacia';
 
-export default function TabAntepasados({ ficha }) {
-  // Evaluamos si antepasados viene como 'antepasados' o 'lista_antepasados'
-  const listaAntepasados = ficha.antepasados || ficha.lista_antepasados || [];
+// Importa el servicio correspondiente de tu carpeta servicios
+import { obtenerFichaComunero } from '../../../servicios/fichaComunero.js';
+
+export default function TabAntepasados({ dni, ficha, onUpdateTabSection }) {
+  const [cargandoTab, setCargandoTab] = useState(false);
+
+  useEffect(() => {
+    const fetchAntepasadosFrescos = async () => {
+      if (!dni) return;
+      setCargandoTab(true);
+
+      try {
+        const res = await obtenerFichaComunero(dni);
+        const listaFresca = res.lista_antepasados || res.antepasados || [];
+
+        // Notifica únicamente esta sección para la impresión A4
+        if (onUpdateTabSection) {
+          onUpdateTabSection({ lista_antepasados: listaFresca });
+        }
+      } catch (error) {
+        console.error("Error al obtener antepasados:", error);
+      } finally {
+        setCargandoTab(false);
+      }
+    };
+
+    fetchAntepasadosFrescos();
+  }, [dni]);
+
+  const listaAntepasados = ficha.lista_antepasados || ficha.antepasados || [];
+
+  if (cargandoTab) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -17,12 +52,10 @@ export default function TabAntepasados({ ficha }) {
       <Grid container spacing={2}>
         {listaAntepasados.length > 0 ? (
           listaAntepasados.map((ant, i) => {
-            // Mapeo seguro para capturar nombres, apellidos, parentesco y estado
             const nombres = ant.nombres_ant || ant.nombres || ant.nombre || '';
             const apellidos = ant.apellidos_ant || ant.apellidos || '';
             const tipo = ant.tipo_ant || ant.tipo || ant.parentesco || 'N/A';
             
-            // Evalúa si es 1 (numeric o string) para considerar si vive
             const viveVal = ant.vive_ant !== undefined ? ant.vive_ant : ant.vive;
             const estaVivo = Number(viveVal) === 1;
 

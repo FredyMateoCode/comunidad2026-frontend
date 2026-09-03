@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Grid, Typography, Avatar, Chip, Button, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PrintIcon from '@mui/icons-material/Print';
 
 export default function FichaHeader({ ficha, onEditar, onToggleEstado }) {
   // Vite elegirá automáticamente el valor según el entorno (Supabase en Netlify, assets en Local)
@@ -10,6 +11,11 @@ export default function FichaHeader({ ficha, onEditar, onToggleEstado }) {
   
   // 1 = Activo, 0 = Desactivado
   const esActivo = Number(ficha.estado_com) === 1;
+
+  // Dispara el diálogo nativo de impresión del navegador
+  const handleImprimir = () => {
+    window.print();
+  };
 
   return (
     <Paper elevation={2} sx={{ p: 3, mb: 3, borderRadius: 3, bgcolor: '#02306f', color: 'white' }}>
@@ -54,6 +60,24 @@ export default function FichaHeader({ ficha, onEditar, onToggleEstado }) {
               sx={{ fontWeight: 'bold', color: 'white' }}
             />
           )}
+
+          {/* Botón Imprimir Ficha A4 */}
+          <Tooltip title="Imprimir Ficha A4 / Exportar PDF">
+            <Button
+              variant="contained"
+              startIcon={<PrintIcon />}
+              onClick={handleImprimir}
+              sx={{ 
+                bgcolor: '#ff6a00', 
+                color: 'white',
+                fontWeight: 'bold', 
+                textTransform: 'none',
+                '&:hover': { bgcolor: '#e05d00' } 
+              }}
+            >
+              Ficha A4
+            </Button>
+          </Tooltip>
 
           {/* Botón de Edición */}
           <Tooltip title="Editar Comunero">

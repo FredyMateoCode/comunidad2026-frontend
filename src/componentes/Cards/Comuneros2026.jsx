@@ -306,7 +306,7 @@ export default function Comuneros2026({ onVerFicha }) {
                               }
                             }}
                           >
-                            Imprimir
+                            Ficha A4
                           </Button>
 
                         </Stack>

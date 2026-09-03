@@ -4,10 +4,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Swal from 'sweetalert2';
 
 import FichaComunero from './FichaComunero';
+import FichaImprimibleA4 from './FichaImprimibleA4';
 import { ModalEditarComunero } from '../Modals/ModalEditarComunero2026.jsx';
 import { obtenerFichaComunero } from '../../servicios/fichaComunero.js';
 import { obtenerComuneroPorDNI } from '../../servicios/editarComunero.js'; 
-import { cambiarEstadoComunero } from '../../servicios/cambiarEstadoComunero.js'; // Ajusta esta ruta a tu servicio de API
+import { cambiarEstadoComunero } from '../../servicios/cambiarEstadoComunero.js';
 
 export default function FichaComuneroContainer({ dni, onVolver }) {
   const [fichaData, setFichaData] = useState(null);
@@ -33,6 +34,14 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
     cargarFicha();
   }, [dni]);
 
+  // Actualiza parcialmente secciones (familia, antecedentes, etc.) manteniendo intacto el resto
+  const handleUpdateTabSection = (nuevosDatosSeccion) => {
+    setFichaData(prev => ({
+      ...prev,
+      ...nuevosDatosSeccion
+    }));
+  };
+
   // Abrir modal y obtener datos limpios
   const handleAbrirEditar = async () => {
     setCargandoEditar(true);
@@ -54,7 +63,6 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
     const nuevoEstado = esActivo ? 0 : 1;
     const accionTexto = esActivo ? 'desactivar' : 'activar';
 
-    // Modal de confirmación
     const confirmacion = await Swal.fire({
       title: `¿Deseas ${accionTexto} a este comunero?`,
       text: esActivo 
@@ -71,10 +79,8 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
     if (!confirmacion.isConfirmed) return;
 
     try {
-      // Capturamos id_us desde el almacenamiento o sesión
       const id_us = localStorage.getItem('id_us') || 1;
 
-      // Petición HTTP al Backend
       await cambiarEstadoComunero({
         dni_com,
         estado_com: nuevoEstado,
@@ -84,12 +90,11 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
       Swal.fire({
         icon: 'success',
         title: 'Estado actualizado',
-        text: `El comunero fue ${esActivo ? 'desactivado' : 'activado'} correctamente.`,
+        text: `El comunero fue ${esActivo ? 'desactivado' : 'activar'} correctamente.`,
         timer: 1800,
         showConfirmButton: false
       });
 
-      // Refrescamos los datos completos
       cargarFicha();
 
     } catch (err) {
@@ -109,23 +114,53 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <style>
+        {`
+          /* En pantalla normal: oculta el div mandándolo fuera del viewport */
+          #seccion-a4-impresion {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+          }
+
+          /* En modo impresión: oculta todo excepto el div A4 */
+          @media print {
+            body * {
+              visibility: hidden !important;
+            }
+            #seccion-a4-impresion, #seccion-a4-impresion * {
+              visibility: visible !important;
+            }
+            #seccion-a4-impresion {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 100% !important;
+            }
+            @page {
+              size: A4 portrait;
+              margin: 10mm;
+            }
+          }
+        `}
+      </style>
+
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
         onClick={onVolver}
+        className="no-printable"
         sx={{ color: '#02306f', borderColor: '#02306f', fontWeight: 'bold', mb: 2 }}
       >
         Volver al Padrón
       </Button>
 
-      {/* Carga inicial del componente */}
       {cargando && (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
           <CircularProgress size={50} />
         </Box>
       )}
 
-      {/* Loader flotante al presionar Editar */}
       <Backdrop
         open={cargandoEditar}
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -136,11 +171,16 @@ export default function FichaComuneroContainer({ dni, onVolver }) {
       {error && <Alert severity="error" sx={{ my: 2 }}>{error}</Alert>}
 
       {!cargando && fichaData && (
-        <FichaComunero 
-          ficha={fichaData} 
-          onEditar={handleAbrirEditar} 
-          onToggleEstado={handleToggleEstado}
-        />
+        <>
+          <FichaComunero 
+            ficha={fichaData} 
+            onEditar={handleAbrirEditar} 
+            onToggleEstado={handleToggleEstado}
+            onUpdateTabSection={handleUpdateTabSection}
+          />
+
+          <FichaImprimibleA4 ficha={fichaData} />
+        </>
       )}
 
       <ModalEditarComunero

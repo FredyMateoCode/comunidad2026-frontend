@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress } from '@mui/material';
 import Swal from 'sweetalert2';
 import { FormEditarComunero2026 } from '../Formularios/FormEditarComunero2026.jsx';
-import { actualizarComuneroService } from '../../servicios/actualizarComunero.js'; // Ajusta la ruta a tu archivo en servicios
+import { actualizarComuneroService } from '../../servicios/actualizarComunero.js';
 
 export const ModalEditarComunero = ({ open, onClose, datosIniciales, onGuardar }) => {
   const [formData, setFormData] = useState({});
@@ -24,14 +24,12 @@ export const ModalEditarComunero = ({ open, onClose, datosIniciales, onGuardar }
     setLoading(true);
 
     try {
-      // Petición delegada al servicio
+      // El payload contiene 'datos_conyuge' actualizado directamente por ConyugeTab
       const dataRespuesta = await actualizarComuneroService(formData);
 
-      // Cerramos modal y notificamos al padre
       onClose();
       if (onGuardar) onGuardar(dataRespuesta);
 
-      // Alerta de éxito
       Swal.fire({
         icon: 'success',
         title: '¡Actualizado!',

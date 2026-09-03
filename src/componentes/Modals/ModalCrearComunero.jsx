@@ -6,7 +6,6 @@ import { crearComuneroService } from '../../servicios/insertarComunero.js';
 import { obtenerCaserios } from '../../servicios/obtenerCaserios.js'; 
 
 const estadoInicial = {
-  // Datos Generales / Datos de Identificación
   dni_com: '',
   nombres_com: '',
   ap_paterno_com: '',
@@ -18,22 +17,18 @@ const estadoInicial = {
   fecha_nac_com: '',
   estado_com: '1',
   
-  // Ubicación / Caseríos / Usufructo
   id_cas: '',
   nombre_caserio: '',
   id_usu: '',
   nombre_usufructo: '',
 
-  // Archivo (🟢 Usamos 'foto' para alinearnos con los componentes reutilizados)
   foto: null,
 
-  // Tabs / Arrays de Pestañas
   datos_conyuge: {},
   lista_hijos: [],
   lista_cargos: [],
   lista_antepasados: [],
 
-  // Listas auxiliares para los desplegables
   caserios: [],
   listaCaserios: [],
   caserio: []
@@ -76,7 +71,6 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
     }
   }, [open]);
 
-  // Manejador estándar de React
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
@@ -110,23 +104,26 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
     setLoading(true);
 
     try {
+      // Extraer datos del usuario activo desde el localStorage
+      const sesion = localStorage.getItem('usuario') || localStorage.getItem('user');
+      const usuarioActivo = sesion ? JSON.parse(sesion) : {};
+      const idUsuarioSesion = usuarioActivo.id_us || usuarioActivo.id_usuario || usuarioActivo.id || null;
+
       const dataPayload = new FormData();
       
       const payloadOriginal = {
         ...formData,
-        dni_com: dniLimpio
+        dni_com: dniLimpio,
+        id_us: idUsuarioSesion
       };
 
-      // 1. Excluimos auxiliares, duplicados y fotos para procesarlas aparte
       const clavesAExcluir = ['caserios', 'listaCaserios', 'caserio', 'foto', 'foto_file', 'estado_civil_com'];
 
-      // 2. Procesa y adjunta cada clave
       Object.keys(payloadOriginal).forEach((key) => {
         if (clavesAExcluir.includes(key)) return;
 
         const valor = payloadOriginal[key];
 
-        // Serializamos objetos y arrays
         if (typeof valor === 'object' && valor !== null) {
           dataPayload.append(key, JSON.stringify(valor));
         } else {
@@ -134,22 +131,11 @@ export const ModalCrearComunero = ({ open, onClose, onGuardar }) => {
         }
       });
 
-      // 3. 🟢 Adjuntamos la foto buscando el objeto File nativo
       const archivoFoto = (formData.foto instanceof File) ? formData.foto : formData.foto_file;
 
       if (archivoFoto instanceof File) {
         dataPayload.append('foto', archivoFoto);
-        console.log("📸 Foto adjuntada al FormData correctamente:", archivoFoto.name);
-      } else {
-        console.warn("⚠️ No se seleccionó archivo de foto o no es un objeto File válido.");
       }
-
-      // 🔍 Log de depuración
-      console.log('=== DATOS ENVIADOS AL BACKEND ===');
-      for (let [clave, valor] of dataPayload.entries()) {
-        console.log(`${clave}:`, valor);
-      }
-      console.log('=================================');
 
       const dataRespuesta = await crearComuneroService(dataPayload);
 
