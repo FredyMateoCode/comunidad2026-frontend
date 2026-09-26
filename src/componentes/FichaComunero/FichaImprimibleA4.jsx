@@ -37,6 +37,15 @@ export default function FichaImprimibleA4({ ficha }) {
     return isNaN(edad) ? 'N/A' : `${edad} años`;
   };
 
+  // Función para formatear fechas a DD/MM/AAAA
+  const formatearFecha = (fecha) => {
+    if (!fecha) return 'N/A';
+    const parteFecha = String(fecha).split('T')[0];
+    const [anio, mes, dia] = parteFecha.split('-');
+    if (!anio || !mes || !dia) return fecha;
+    return `${dia}/${mes}/${anio}`;
+  };
+
   // Mapeo unificado de variables del cónyuge
   const dniCon = conyuge?.dni_con || conyuge?.dni || conyuge?.dni_conyuge || 'N/A';
   const nombresConStr = conyuge?.nombres_con || conyuge?.nombres || conyuge?.nombre || '';
@@ -76,7 +85,7 @@ export default function FichaImprimibleA4({ ficha }) {
               PADRÓN GENERAL DE COMUNEROS 2026
             </Typography>
             <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
-              FICHA TÉCNICA DEL COMUNERO
+              FICHA DE INSCRIPCIÓN DEL COMUNERO
             </Typography>
             <Typography variant="caption" sx={{ color: '#555', fontSize: '0.85rem' }}>
               Estado: <strong>{Number(d.estado_com || d.estado) === 1 ? 'ACTIVO' : 'INACTIVO'}</strong>
@@ -133,10 +142,10 @@ export default function FichaImprimibleA4({ ficha }) {
               <TableCell sx={{ py: 0.4, fontSize: '0.85rem', width: '20%' }}>{d.dni || d.dni_com || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>N° Carné:</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>N° Carné Actual:</TableCell>
               <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.num_carne || d.num_carne_com || d.carne || 'N/A'}</TableCell>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Fecha Nac.:</TableCell>
-              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.fecha_nac || d.fecha_nac_com || d.f_nacimiento || 'N/A'}</TableCell>
+              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{formatearFecha(d.fecha_nac || d.fecha_nac_com || d.f_nacimiento)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Edad:</TableCell>
@@ -147,20 +156,26 @@ export default function FichaImprimibleA4({ ficha }) {
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Estado Civil:</TableCell>
               <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.est_civil || d.est_civil_com || d.estado_civil || 'No especificado'}</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Celular:</TableCell>
-              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.celular || d.celular_com || d.telefono || 'No registrado'}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Condición:</TableCell>
+              <TableCell sx={{ py: 0.4, fontSize: '0.85rem', fontWeight: 'bold', color: '#02306f' }}>
+                {d.condicion || d.condicion_com || 'No especificado'}
+              </TableCell>
             </TableRow>
             <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Celular:</TableCell>
+              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.celular || d.celular_com || d.telefono || 'No registrado'}</TableCell>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Grado Instrucción:</TableCell>
               <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.g_instruccion_com || 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Lugar Nac.:</TableCell>
               <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.lugar_nacimiento_com || 'N/A'}</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Caserío:</TableCell>
+              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.nom_caserio || d.caserio || d.nombre_caserio || 'N/A'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Domicilio Actual:</TableCell>
-              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.domicilio || d.domicilio_com || d.direccion || 'No especificado'}</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Caserío:</TableCell>
-              <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.nom_caserio || d.caserio || d.nombre_caserio || 'N/A'}</TableCell>
+              <TableCell colSpan={3} sx={{ py: 0.4, fontSize: '0.85rem' }}>{d.domicilio || d.domicilio_com || d.direccion || 'No especificado'}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Año Ingreso:</TableCell>
@@ -176,7 +191,6 @@ export default function FichaImprimibleA4({ ficha }) {
           2. CARGA FAMILIAR
         </Typography>
 
-        {/* Subsección Cónyuge / Pareja */}
         {conyuge ? (
           <Table size="small" sx={{ mb: 1.5, border: '1px solid #ccc' }}>
             <TableBody>
@@ -193,7 +207,7 @@ export default function FichaImprimibleA4({ ficha }) {
               </TableRow>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Fecha Nac.:</TableCell>
-                <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{fechaNacCon} {fechaNacCon !== 'N/A' && `(${calcularEdadImp(fechaNacCon)})`}</TableCell>
+                <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{formatearFecha(fechaNacCon)} {fechaNacCon !== 'N/A' && `(${calcularEdadImp(fechaNacCon)})`}</TableCell>
                 <TableCell sx={{ fontWeight: 'bold', py: 0.4, fontSize: '0.85rem', bgcolor: '#f9f9f9' }}>Celular:</TableCell>
                 <TableCell sx={{ py: 0.4, fontSize: '0.85rem' }}>{celularCon}</TableCell>
               </TableRow>
@@ -238,7 +252,7 @@ export default function FichaImprimibleA4({ ficha }) {
                   <TableRow key={idx}>
                     <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{`${hijo.nombre || hijo.nombres || ''} ${hijo.apellidos || hijo.ap_paterno || ''}`.trim() || 'N/A'}</TableCell>
                     <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{hijo.dni || hijo.dni_hijo || 'N/A'}</TableCell>
-                    <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{fechaHijo} {fechaHijo !== 'N/A' && `(${calcularEdadImp(fechaHijo)})`}</TableCell>
+                    <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{formatearFecha(fechaHijo)} {fechaHijo !== 'N/A' && `(${calcularEdadImp(fechaHijo)})`}</TableCell>
                   </TableRow>
                 );
               })
@@ -384,7 +398,7 @@ export default function FichaImprimibleA4({ ficha }) {
           <TableBody>
             {antecedentes.length > 0 ? antecedentes.map((item, idx) => (
               <TableRow key={idx}>
-                <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{item.fecha || item.fecha_registro || 'N/A'}</TableCell>
+                <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{formatearFecha(item.fecha || item.fecha_registro)}</TableCell>
                 <TableCell sx={{ py: 0.3, fontSize: '0.85rem' }}>{item.descripcion || item.detalle || item.sancion || 'N/A'}</TableCell>
               </TableRow>
             )) : (

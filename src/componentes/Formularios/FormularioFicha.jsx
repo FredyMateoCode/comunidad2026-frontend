@@ -315,7 +315,7 @@ export default function FormularioFicha() {
             <TextField select fullWidth label="1.14. Estado Civil" name="estadoCivil" value={form.estadoCivil} onChange={handleChange} size="small" SelectProps={{ native: true }}>
               <option value="SOLTERO">SOLTERO</option>
               <option value="CASADO">CASADO</option>
-              <option value="VIUDO">VIUDO</option>
+              <option value="VIUDO(A)">VIUDO(A)</option>
               <option value="DIVORCIADO">DIVORCIADO</option>
               <option value="CONVIVIENTE">CONVIVIENTE</option>
             </TextField>
@@ -348,7 +348,7 @@ export default function FormularioFicha() {
             <TextField select fullWidth label="2.5. Estado Civil" name="conyugeEstadoCivil" value={form.conyugeEstadoCivil} onChange={handleChange} size="small" SelectProps={{ native: true }}>
               <option value="SOLTERO">SOLTERO</option>
               <option value="CASADO">CASADO</option>
-              <option value="VIUDO">VIUDO</option>
+              <option value="VIUDO(A)">VIUDO(A)</option>
               <option value="DIVORCIADO">DIVORCIADO</option>
               <option value="CONVIVIENTE">CONVIVIENTE</option>
             </TextField>

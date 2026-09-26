@@ -197,7 +197,7 @@ export const DatosPersonalesTab = ({ formData = {}, onChange, setFormData }) => 
           <MenuItem value="SOLTERO">SOLTERO</MenuItem>
           <MenuItem value="CASADO">CASADO</MenuItem>
           <MenuItem value="CONVIVIENTE">CONVIVIENTE</MenuItem>
-          <MenuItem value="VIUDO">VIUDO</MenuItem>
+          <MenuItem value="VIUDO(A)">VIUDO(A)</MenuItem>
           <MenuItem value="DIVORCIADO">DIVORCIADO</MenuItem>
         </TextField>
         <TextField sx={{ flex: '1 1 30%' }} label="Grado Instrucción" name="g_instruccion_com" value={formData?.g_instruccion_com || ''} onChange={onChange} size="small" />

@@ -21,6 +21,10 @@ export const ModalEditarComunero = ({ open, onClose, datosIniciales, onGuardar }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ver los datos que se estan enviando al backend:
+    console.log("DATOS ENVIADOS AL BACKEND:", formData);
+
     setLoading(true);
 
     try {
